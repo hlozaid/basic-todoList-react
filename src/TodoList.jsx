@@ -2,7 +2,9 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function TodoList() {
-  let [todos, setTodos] = useState([{ task: "sample-task", id: uuidv4() }]);
+  let [todos, setTodos] = useState([
+    { task: "sample-task", id: uuidv4(), isDone: false },
+  ]);
   let [newTodo, setNewTodo] = useState("");
   let [isUpper, setIsUpper] = useState(false);
 
@@ -12,6 +14,7 @@ export default function TodoList() {
       {
         task: isUpper ? newTodo.toUpperCase() : newTodo,
         id: uuidv4(),
+        isDone: false,
       },
     ]);
     setNewTodo("");
@@ -70,6 +73,21 @@ export default function TodoList() {
     setIsUpper((prev) => !prev);
   };
 
+  let markAsDone = (id) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => {
+        if (todo.id == id) {
+          return {
+            ...todo,
+            isDone: true,
+          };
+        } else {
+          return todo;
+        }
+      }),
+    );
+  };
+
   return (
     <>
       <div>
@@ -85,15 +103,21 @@ export default function TodoList() {
         <ul>
           {todos.map((todo) => (
             <li key={todo.id}>
-              <span>{todo.task}</span>
+              <span
+                style={todo.isDone ? { textDecoration: "line-through" } : {}}
+              >
+                {todo.task}
+              </span>
               &nbsp; &nbsp; &nbsp;
               <button onClick={() => toggleCaseOne(todo.id)}>
                 {todo.task === todo.task.toUpperCase()
                   ? "LowerCase"
                   : "UpperCase"}
               </button>
-              &nbsp;
+              &nbsp; &nbsp;
               <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+              &nbsp; &nbsp; &nbsp;
+              <button onClick={() => markAsDone(todo.id)}>Task Done</button>
             </li>
           ))}
         </ul>
