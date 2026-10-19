@@ -88,6 +88,15 @@ export default function TodoList() {
     );
   };
 
+let markAllasDone = () => {
+  setTodos((prevTodos) =>
+    prevTodos.map((todo) => ({
+      ...todo,
+      isDone: true,
+    })),
+  );
+};
+
   return (
     <>
       <div>
@@ -123,7 +132,8 @@ export default function TodoList() {
         </ul>
         <button onClick={toggleCase}>
           {isUpper ? "LowerCase All" : "UpperCase All"}
-        </button>
+        </button> 
+        <button onClick={markAllasDone}>All Task Done</button>
       </div>
     </>
   );
